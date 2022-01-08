@@ -1,0 +1,30 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+// every user is linked to ONE group
+model User {
+  ID String @id
+  username String
+  profilePic String
+  inGroup Groups? @relation(fields: [linkedTo], references: [ID])
+  linkedTo Int
+}
+
+// every group has bunch of users
+model Groups {
+  ID Int @id @default(autoincrement())
+  MaxCap Int 
+  Name String?
+  Users User[]
+}
+
+
