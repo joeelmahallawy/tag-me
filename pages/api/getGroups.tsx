@@ -4,14 +4,15 @@ const prisma = new PrismaClient();
 
 const handler = async (req: NextApiRequest, res: NextApiResponse) => {
   try {
-    const data = await JSON.parse(req.body);
-    await prisma.user.create({
-      data: {
-        ...data,
+    const { groupsOf } = req.query;
+    const data = await prisma.groups.findMany({
+      where: {
+        MaxCap: Number(groupsOf),
       },
     });
+    res.status(200).json(data);
   } catch (err) {
-    res.status(404).json({ error: err.message });
+    res.status(404).json({ err: err.message });
   }
 };
 export default handler;

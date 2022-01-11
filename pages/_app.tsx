@@ -5,11 +5,8 @@ import Layout from "../components/layout";
 import theme from "../utils/theme";
 import React, { useEffect, useState } from "react";
 import { RecoilRoot, useSetRecoilState, atom, useRecoilValue } from "recoil";
-import { globalUser, useGlobalUser } from "../lib/recoil";
-import { DiscordAuthUser } from "../interfaces";
+import { globalUser } from "../lib/recoil";
 
-// { user }: { user: DiscordAuthUser }
-// props
 const MyApp = (props) => {
   return (
     <UserProvider>

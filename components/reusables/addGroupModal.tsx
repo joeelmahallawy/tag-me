@@ -15,23 +15,39 @@ import {
   ModalOverlay,
   NumberInput,
   NumberInputField,
+  useToast,
   Radio,
   RadioGroup,
   Stack,
+  Text,
   useDisclosure,
 } from "@chakra-ui/react";
-import React, { useState } from "react";
-import { AddNewGroupInputData } from "../../interfaces";
+import React, { useEffect, useState } from "react";
+import addGroup from "../../helpers/addGroup";
+import InitializeGroups from "../../helpers/getGroups";
+import { AddNewGroupInputData, CurrentGroups } from "../../interfaces";
 
 const AddGroupModal = () => {
+  const { isOpen, onOpen, onClose } = useDisclosure();
   const [groupData, setGroupData] = useState<AddNewGroupInputData>({
     name: "",
     numberOfMembers: 0,
     preferredSocialAccount: "",
   });
-  const { isOpen, onOpen, onClose } = useDisclosure();
+  const toast = useToast();
+  const [currentGroups, setCurrentGroups] = useState<CurrentGroups[]>([]);
+
+  useEffect(() => {
+    InitializeGroups("15", setCurrentGroups);
+  }, []);
   return (
     <>
+      {currentGroups.map((group) => (
+        <Center w="100%" mt="2rem" justifyContent="space-between">
+          <Heading>{group.Name}</Heading>
+          <Text>{group.MaxCap}</Text>
+        </Center>
+      ))}
       <Center w="100%" mt="5rem">
         <Button fontSize="2rem" p="2rem" onClick={onOpen}>
           Add new group
@@ -43,9 +59,9 @@ const AddGroupModal = () => {
         <ModalContent p="0.5%">
           <ModalHeader fontSize="1.5rem">Add new group</ModalHeader>
           <form
-            onSubmit={(e) => {
+            onSubmit={async (e) => {
               e.preventDefault();
-              console.log(groupData);
+              addGroup(groupData, toast, onClose);
             }}
           >
             <ModalBody>
@@ -58,22 +74,23 @@ const AddGroupModal = () => {
                   }}
                 />
               </FormControl>
-              <FormControl isRequired mt={3}>
+              <FormControl mt={3} isRequired>
                 <FormLabel>Group size</FormLabel>
-                <NumberInput placeholder="20" min={0} max={25} precision={0}>
-                  <NumberInputField
-                    placeholder="10"
-                    onChange={(e) => {
-                      const roundVal = (val: string): number =>
-                        Math.round(parseFloat(val));
-                      setGroupData({
-                        ...groupData,
-                        numberOfMembers: roundVal(e.currentTarget.value),
-                      });
-                    }}
-                  />
-                </NumberInput>
+                <RadioGroup
+                  onChange={(e) => {
+                    setGroupData({ ...groupData, numberOfMembers: Number(e) });
+                  }}
+                >
+                  <Stack direction="row" spacing={5}>
+                    <Radio value={"5"}>5</Radio>
+                    <Radio value={"10"}>10</Radio>
+                    <Radio value={"15"}>15</Radio>
+                    <Radio value={"20"}>20</Radio>
+                    <Radio value={"25"}>25</Radio>
+                  </Stack>
+                </RadioGroup>
               </FormControl>
+
               <FormControl isRequired mt={3}>
                 <FormLabel>Preferred social</FormLabel>
                 <RadioGroup
@@ -92,7 +109,7 @@ const AddGroupModal = () => {
             <ModalFooter display="block">
               <Center color="red.500">
                 Adding a new group will remove you from any current group you're
-                in.
+                in *
               </Center>
               <Flex mt={3} justifyContent="flex-end">
                 <Button
@@ -127,10 +144,3 @@ const AddGroupModal = () => {
   );
 };
 export default AddGroupModal;
-
-{
-  /* <Center>
-                Are you sure you want to add another group? You will be removed
-                from any current group you're in.
-              </Center> */
-}

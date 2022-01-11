@@ -23,7 +23,9 @@ model User {
 model Groups {
   ID Int @id @default(autoincrement())
   MaxCap Int 
-  Name String?
+  currentNumberOfUsers Int
+  Name String
+  preferredSocial String
   Users User[]
 }
 

@@ -10,3 +10,10 @@ export interface AddNewGroupInputData {
   numberOfMembers: number;
   preferredSocialAccount: "Twitter" | "Discord" | string;
 }
+
+export interface CurrentGroups {
+  ID: number;
+  MaxCap: number;
+  Name: string;
+  preferredSocial: string;
+}
