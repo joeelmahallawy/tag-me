@@ -9,11 +9,12 @@ import {
 } from "@chakra-ui/react";
 import Link from "next/link";
 import React from "react";
+import Carousel from "../carousel";
 
 const LandingPage = () => {
   return (
     <>
-      <Center w="100vw" h={["50vh", "60vh", "65vh", "75vh", "80vh"]}>
+      <Center w="100vw" h={["50vh", "60vh", "70vh", "80vh", "90vh"]}>
         <Center flexDir="column" gap={10}>
           <Text
             bgGradient="linear(to-r, orange.500, pink.600)"
@@ -39,23 +40,31 @@ const LandingPage = () => {
           </Link>
         </Center>
       </Center>
-      <Center p="1rem">
-        <Center justifyContent="flex-end" w="50%">
-          <Image
-            w={["200px", "550px", "300px", "350px", "500px", "600px"]}
-            h={["200px", "350px", "300px", "350px", "500px", "600px"]}
-            src="https://images.cointelegraph.com/images/1434_aHR0cHM6Ly9zMy5jb2ludGVsZWdyYXBoLmNvbS91cGxvYWRzLzIwMjItMDEvYmJmMjk0MjAtNWM4YS00MzQ0LWI4ZDktOGMyYTVjMmQ2YThmLmpwZw==.jpg"
-            alt=""
-          />
+      <Center flexDir="column" p="1rem">
+        <Center flexDir="column" justifyContent="flex-end">
+          <Heading fontFamily="Arial" fontSize="4rem" mb="3rem">
+            Tired of seeing whitelist requirements like these?
+          </Heading>
+          <Carousel />
+        </Center>
+        <Center flexDir="column" justifyContent="flex-end">
+          <Heading fontFamily="Arial" fontSize="4rem" mb="3rem">
+            And bot messages like these?
+          </Heading>
+          <Carousel />
         </Center>
         <Text w="60%" p="5%" fontSize="1.5rem">
-          Life rewards the early adopters. Which is not always easy with the
-          whitelist requirments of new promising crypto projects. No longer will
-          that stand in the way of your astronomical gains this year. With our
-          platform you will be able to join groups of interesting and
-          like-minded individuals and earn the referrals required to get on the
-          whitelists so we can prosper together– so what are you waiting for?
-          {/* Here's how it works  */}
+          As the rise of NFTs continue, we've find ourselves surrounded by tons
+          of projects, whether it be good or bad. Trying to find good projects
+          is no easy task, and when you do, there's always a whitelist that
+          requires you to invite 10+ people to their discord server. Whether
+          your the person who makes bots send discord invites to random people,
+          or the person who recieves the bot's messages, you're in the right
+          place. TagMe is THE platform to connect you with other NFT traders and
+          invite each other to discord servers to get on that whitelist of the
+          project you've been dreaming of. It's really simple, join a group,
+          exchange socials, start inviting group members and chat about projects
+          you're interested in.
         </Text>
       </Center>
     </>

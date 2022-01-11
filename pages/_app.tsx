@@ -1,34 +1,46 @@
 import { ChakraProvider } from "@chakra-ui/react";
-import App, { AppProps } from "next/app";
+import App, { AppContext, AppProps } from "next/app";
 import { UserProvider, useUser } from "@auth0/nextjs-auth0";
 import Layout from "../components/layout";
 import theme from "../utils/theme";
 import React, { useEffect, useState } from "react";
 import { RecoilRoot, useSetRecoilState, atom, useRecoilValue } from "recoil";
-import { useGlobalUser } from "../lib/recoil";
+import { globalUser, useGlobalUser } from "../lib/recoil";
+import { DiscordAuthUser } from "../interfaces";
 
-const MyApp = ({ Component, pageProps }: AppProps) => {
-  const [user, setUser] = useGlobalUser();
-
-  useEffect(() => {
-    // initialize user object globally
-    (async function () {
-      const response = await fetch("/api/authData");
-      const data = await response.json();
-      setUser(data);
-    })();
-  }, []);
+// { user }: { user: DiscordAuthUser }
+// props
+const MyApp = (props) => {
   return (
-    <RecoilRoot>
-      <UserProvider>
+    <UserProvider>
+      <RecoilRoot
+        initializeState={({ set }) => {
+          set(globalUser, props.user);
+        }}
+      >
         <ChakraProvider theme={theme}>
           <Layout>
-            <Component {...pageProps} />
+            <props.Component {...props.pageProps} />
           </Layout>
         </ChakraProvider>
-      </UserProvider>
-    </RecoilRoot>
+      </RecoilRoot>
+    </UserProvider>
   );
+};
+
+MyApp.getInitialProps = async (appContext: AppContext) => {
+  // get app initial props (component and pageProps)
+  const appProps = await App.getInitialProps(appContext);
+  const res = await fetch(`${process.env.AUTH0_BASE_URL}/api/stats`, {
+    headers: { Cookie: appContext.ctx.req.headers.cookie },
+  });
+  // get user's authenticated data from auth endpoint
+  const userData = await res.text();
+  if (!userData) return { ...appProps, user: null };
+  else {
+    const user = JSON.parse(userData);
+    return { ...appProps, user: user };
+  }
 };
 
 export default MyApp;

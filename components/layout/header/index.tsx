@@ -2,14 +2,13 @@ import { Button } from "@chakra-ui/button";
 import { Center } from "@chakra-ui/react";
 import Link from "next/link";
 import React from "react";
-import { useGlobalUser } from "../../../lib/recoil";
+import { useRecoilValue } from "recoil";
+import { globalUser } from "../../../lib/recoil";
 
 const Header = () => {
-  const [user, setUser] = useGlobalUser();
-
+  const user = useRecoilValue(globalUser);
   const SCREEN_WIDTH_BP = ["100%", "90%", "85%", "80%", "70%", "60%"];
-  console.log("heres out user", user);
-  console.log(Object.keys(user).length);
+
   return (
     <Center
       justifyContent="space-between"
@@ -18,7 +17,7 @@ const Header = () => {
       m="0 auto"
     >
       (LOGO HERE)
-      {Object.keys(user).length !== 0 ? (
+      {user ? (
         <Link href="/api/auth/logout">
           <Button>Log out</Button>
         </Link>
