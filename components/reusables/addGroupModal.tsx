@@ -26,6 +26,7 @@ import React, { useEffect, useState } from "react";
 import addGroup from "../../helpers/addGroup";
 import InitializeGroups from "../../helpers/getGroups";
 import { AddNewGroupInputData, CurrentGroups } from "../../interfaces";
+import Groups from "../groups";
 
 const AddGroupModal = () => {
   const { isOpen, onOpen, onClose } = useDisclosure();
@@ -38,15 +39,12 @@ const AddGroupModal = () => {
   const [currentGroups, setCurrentGroups] = useState<CurrentGroups[]>([]);
 
   useEffect(() => {
-    InitializeGroups("15", setCurrentGroups);
+    InitializeGroups("10", setCurrentGroups);
   }, []);
   return (
     <>
-      {currentGroups.map((group) => (
-        <Center w="100%" mt="2rem" justifyContent="space-between">
-          <Heading>{group.Name}</Heading>
-          <Text>{group.MaxCap}</Text>
-        </Center>
+      {currentGroups.map((group, i) => (
+        <Groups group={group} index={i} />
       ))}
       <Center w="100%" mt="5rem">
         <Button fontSize="2rem" p="2rem" onClick={onOpen}>

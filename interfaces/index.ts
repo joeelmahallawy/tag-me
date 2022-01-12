@@ -16,4 +16,5 @@ export interface CurrentGroups {
   MaxCap: number;
   Name: string;
   preferredSocial: string;
+  currentNumberOfUsers: string;
 }
